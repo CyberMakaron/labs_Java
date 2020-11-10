@@ -1,8 +1,10 @@
-package ru.bstu.iitus.vt41.kmi;
+package ru.bstu.iitus.vt41.kmi.person;
+
+import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 
 import java.util.Scanner;
 
-public class Worker extends Person{
+public class Worker extends Person {
     String organization;
     String tab_num;
     // хорошо бы добавить должность, но тогда не вяжется toString в наследуемых классах - придётся переопределять полностью

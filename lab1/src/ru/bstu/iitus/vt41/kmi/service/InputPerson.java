@@ -1,4 +1,4 @@
-package ru.bstu.iitus.vt41.kmi;
+package ru.bstu.iitus.vt41.kmi.service;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;

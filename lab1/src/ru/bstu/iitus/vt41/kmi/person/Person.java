@@ -1,11 +1,12 @@
-package ru.bstu.iitus.vt41.kmi;
+package ru.bstu.iitus.vt41.kmi.person;
 
 import java.util.Calendar;
 import java.util.Scanner;
 
-abstract class Person {
+public abstract class Person {
     Calendar b_day;
     String name;
+
     public abstract void init(Scanner scanner); // считывание параметров с консоли
 
     public int getAge(){ // возвращается возраст человека на текущий момент (полное количество лет)

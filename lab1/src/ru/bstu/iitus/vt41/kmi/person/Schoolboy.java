@@ -1,8 +1,10 @@
-package ru.bstu.iitus.vt41.kmi;
+package ru.bstu.iitus.vt41.kmi.person;
+
+import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 
 import java.util.Scanner;
 
-public class Schoolboy extends Person{
+public class Schoolboy extends Person {
     String _class;
     String school;
 

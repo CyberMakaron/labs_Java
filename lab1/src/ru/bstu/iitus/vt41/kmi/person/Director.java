@@ -1,8 +1,10 @@
-package ru.bstu.iitus.vt41.kmi;
+package ru.bstu.iitus.vt41.kmi.person;
+
+import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 
 import java.util.Scanner;
 
-public class Director extends Worker{
+public class Director extends Worker {
     String post;
 
     @Override
