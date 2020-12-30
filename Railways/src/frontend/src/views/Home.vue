@@ -57,8 +57,8 @@ export default {
   },
   created() {
     this.minDate = new Date().toISOString().split("T")[0];
-    this.$http.get('/stations/departs').then((response) => this.depart_options = response.data)
-    this.$http.get('/stations/arrives').then((response) => this.arrive_options = response.data)
+    this.$http.get('/station/all_departs').then((response) => this.depart_options = response.data)
+    this.$http.get('/station/all_arrives').then((response) => this.arrive_options = response.data)
   },
   methods: {
     btnClick(){

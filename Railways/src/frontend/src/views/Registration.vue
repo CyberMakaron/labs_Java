@@ -39,30 +39,31 @@ export default {
       if (this.password != this.rep_password){
         this.passwords_status = "border-danger text-danger";
         this.warning += 2
+      } else {
+        this.$http.post('/user/registration', {
+          email: this.email,
+          password: MD5(this.password).toString()
+        }).then((response) => {
+          this.responseProcessing(response)
+        })
+            .catch((errors) => {
+              console.log(errors)
+            })
       }
-      this.$http.post('/users/registration', {
-        email: this.email,
-        password_md5: MD5(this.password).toString()
-      }).then((response) => { if (this.warning == 0) {
-                                User.login(response.data)
-                                router.push({name: 'Home'})}})
-          .catch((errors) => {console.log(errors)
-                              this.warning += 1
-                              this.email_status = "border-danger text-danger"})
-      //  console.log('logiruy:' + this.data)
-      // if (this.data != null) {
-      //   //User.login(data);
-      //   router.push({name: 'Home'})
-      // } else {
-      //   this.email_status = "border-danger text-danger";
-      //   this.warning = 1
-      // }
       event.preventDefault()
     },
     fieldChanged(){
       this.warning = 0
       this.email_status = "";
       this.passwords_status = "";
+    },
+    responseProcessing(user){
+      if (user.length === 0){
+        this.warning += 1
+        this.email_status = "border-danger text-danger"
+      }
+      User.login(user[0])
+      router.push({name: 'Home'})
     }
   }
 }

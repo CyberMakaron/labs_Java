@@ -1,28 +1,37 @@
 package ru.bstu.iitus.vt41.kmi.Railways.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bstu.iitus.vt41.kmi.Railways.models.Station;
-import ru.bstu.iitus.vt41.kmi.Railways.repo.StationsRepository;
+import ru.bstu.iitus.vt41.kmi.Railways.repo.StationRepository;
+import ru.bstu.iitus.vt41.kmi.Railways.services.StationService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class StationsController {
 
-    private final StationsRepository repository;
+    @Autowired
+    private StationRepository rep_station;
+    @Autowired
+    StationService service_station;
 
-    StationsController(StationsRepository repository) {
-        this.repository = repository;
+    @GetMapping("/station/stationById/{id}")
+    private List<Station> StationById(@PathVariable("id") Long id){
+        return service_station.StationById(id);
     }
 
-    @GetMapping("/stations/departs")
-    List<Station> departs(){
-        return (List<Station>) repository.findAll();
+    @GetMapping("/station/all_departs")
+    private List<Station> Departs(){
+        return (List<Station>) rep_station.findAll();
     }
 
-    @GetMapping("/stations/arrives")
-    List<Station> arrives(){
-        return (List<Station>) repository.findAll();
+    @GetMapping("/station/all_arrives")
+    private List<Station> Arrives(){
+        return (List<Station>) rep_station.findAll();
     }
 }

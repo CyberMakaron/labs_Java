@@ -8,10 +8,18 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Station {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
+    private String name;
+    private String phone;
+    private String email;
+    private String password;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }

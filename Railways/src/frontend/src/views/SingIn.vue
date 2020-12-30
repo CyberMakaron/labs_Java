@@ -7,9 +7,9 @@
 <!--    <label for="inputPassword" class="sr-only">Password</label>-->
     <input type="password" id="inputPassword" class="form-control mb-2" v-bind:class="edits_status" placeholder="Пароль" required="" v-model="password" v-on:change="fieldChanged()">
     <div v-bind:class="edits_status" v-if="edits_status != ''">Неверный логин или пароль!</div>
-    <div class="checkbox mb-3">
-      <label><input type="checkbox" name="remember-me"> Запомнить меня</label>
-    </div>
+<!--    <div class="checkbox mb-3">-->
+<!--      <label><input type="checkbox" name="remember-me"> Запомнить меня</label>-->
+<!--    </div>-->
     <button class="btn btn-lg btn-danger btn-block" type="submit">Войти</button>
     <div class="mt-2">
       <router-link class="mr-5" href="" v-bind:to="{name: 'Registration'}">Регистрация</router-link>
@@ -36,17 +36,21 @@ export default {
   methods: {
     signIn(event){
       this.edits_status = ""
-      this.$http.get('/users/login', {params: {
-          email: this.email,
-          password_md5: MD5(this.password).toString()
-        }}).then((response) => {User.login(response.data)
-                                router.push({name: 'Home'})})
-           .catch((errors) => {console.log(errors)
-                               this.edits_status = "border-danger text-danger"})
+      this.$http.get('/user/login/' + this.email + '/' + MD5(this.password).toString())
+          .then((response) => {this.responseProcessing(response.data)})
+          .catch((errors) => {console.log(errors)})
       event.preventDefault()
     },
     fieldChanged(){
       this.edits_status = "";
+    },
+    responseProcessing(user){
+      if (user.length === 0)
+        this.edits_status = "border-danger text-danger"
+      else {
+        User.login(user[0])
+        router.push({name: 'Home'})
+      }
     }
   }
 }

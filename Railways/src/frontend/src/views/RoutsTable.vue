@@ -1,7 +1,6 @@
 <template>
   <div>
-<!--    <h1>{{$route.query.depart}} - {{$route.query.arrive}} {{$route.query.date}}</h1>-->
-    <h1>{{depart.name}} - {{arrive.name}} {{query.date}}</h1>
+    <h1>Рейс {{depart.name}} - {{arrive.name}} {{query.date}}</h1>
   <table class="table table-striped my-5">
     <thead>
     <tr>
@@ -13,7 +12,7 @@
     </tr>
     </thead>
     <tbody v-for="item in items">
-    <RoutingTableRow v-bind:voyage="item"></RoutingTableRow>
+      <RoutingTableRow v-bind:voyage="item"></RoutingTableRow>
     </tbody>
   </table>
   </div>
@@ -21,8 +20,6 @@
 
 <script>
 import RoutingTableRow from "@/components/RoutingTableRow";
-import Axios from "axios";
-import User from "@/components/User";
 export default {
   name: "RoutingTable",
   components: {RoutingTableRow},
@@ -35,14 +32,11 @@ export default {
     }
   },
   created: function () {
-    this.$http.get('/stations/station', {params: {id: this.query.departId}})
-        .then((response) => { this.depart = response.data })
-    this.$http.get('/stations/station', {params: {id: this.query.arriveId}})
-        .then((response) => { this.arrive = response.data })
-    this.$http.get('/voyages/voyages',
-        {params: {  departId: this.query.departId,
-                          arriveId: this.query.arriveId,
-                          depart_date: this.query.date}})
+    this.$http.get('/station/stationById/' + this.query.departId)
+        .then((response) => { this.depart = response.data[0] })
+    this.$http.get('/station/stationById/' + this.query.arriveId)
+        .then((response) => { this.arrive = response.data[0] })
+    this.$http.get('/voyage/voyages/' + this.query.departId + "/" + this.query.arriveId + "/" + this.query.date)
         .then((response) => { this.items = response.data })
   }
 }
