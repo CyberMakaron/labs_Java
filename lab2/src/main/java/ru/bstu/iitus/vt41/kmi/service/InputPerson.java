@@ -1,7 +1,6 @@
 package ru.bstu.iitus.vt41.kmi.service;
 
-import lombok.ToString;
-import ru.bstu.iitus.vt41.kmi.Exeptions.OnlyDigitEx;
+import ru.bstu.iitus.vt41.kmi.Exeptions.OnlyDigitException;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -12,11 +11,10 @@ import java.util.Scanner;
 
 public class InputPerson {
     private static Object OnlyDigitEx;
-
     public static int inputInteger(Scanner scanner, String msg){
         int value = 0;
         boolean flag = true;
-        while(flag){    // либо рекурсия
+        while(flag){
             try{
                 System.out.println(msg);
                 value = scanner.nextInt();
@@ -29,23 +27,22 @@ public class InputPerson {
         }
         scanner.nextLine();
         return value;
-    };
-
+    }
     public static String inputString(Scanner scanner, String msg){
         String str;
         System.out.println(msg);
         str = scanner.nextLine();
         return str;
     }
-    public static String inputDigitString(Scanner scanner, String msg) throws OnlyDigitEx {
+    //ввод строки из чисел (длинное число, например номер сертификата)
+    public static String inputDigitString(Scanner scanner, String msg) throws OnlyDigitException {
         String str;
         System.out.println(msg);
         str = scanner.nextLine();
         if (!str.matches("\\d+"))
-            throw new OnlyDigitEx("Строка содержит нечисловые значения", str);
+            throw new OnlyDigitException("Строка содержит нечисловые значения", str);
         return str;
     }
-
     public static Calendar inputDate(Scanner scanner, String msg){
         System.out.println(msg);
         int year = inputInteger(scanner, "Год:");
@@ -60,12 +57,11 @@ public class InputPerson {
         GregorianCalendar date = new GregorianCalendar(year, month, day);
         return date;
     }
-
     private static boolean dateIsValid(int y, int m, int d){
         try {
             LocalDate ld = LocalDate.of(y, m, d);
             return Boolean.TRUE ;
-        } catch ( DateTimeException ex ) {
+        } catch (DateTimeException ex) {
             return Boolean.FALSE ;
         }
     }
