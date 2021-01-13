@@ -36,9 +36,7 @@ public class Main {
     }
     private static void outputIntoConsole(ArrayList<Person> persons, String junior){
         System.out.println("Введённые записи:");
-        for (Person p : persons){
-            System.out.println(p);
-        }
+        persons.forEach(System.out::println);
         System.out.println("\n" + junior);
     }
 }

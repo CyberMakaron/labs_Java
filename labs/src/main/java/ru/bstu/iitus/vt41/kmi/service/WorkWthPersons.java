@@ -40,20 +40,18 @@ public class WorkWthPersons {
         return person;
     }
     private Person makePersonByIndex(Scanner scanner, int mode) {
-        PersonType personType;
+        PersonType personType = null;
         try {
             personType = PersonType.valueOfID(mode);
-        } catch (IllegalArgumentException e){
-            System.out.println("Введён неверный номер! Повторите ввод");
-            return null;
-        }
-        System.out.println("Введите персону с типом '" + personType.getLabel() + "'");
-        try {
+            System.out.println("Введите персону с типом '" + personType.getLabel() + "'");
             Person currentPerson = personType.getPersonClass().newInstance();
             currentPerson.init(scanner);
             return currentPerson;
         } catch (IllegalAccessException | InstantiationException e) {
             System.out.println("Введён неверный номер! Повторите ввод:  " + personType.getPersonClass().getSimpleName());
+            return null;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Введён неверный номер! Повторите ввод");
             return null;
         }
     }
@@ -80,7 +78,7 @@ public class WorkWthPersons {
     public ArrayList<Person> loadPersonsFromFile() throws InstantiationException, IllegalAccessException {
         FileReader reader;
         try {
-            reader = new FileReader(this.pathInput);
+            reader = new FileReader(getPathInput());
         } catch(IOException e){
             System.out.println("Load from file failed: " + e);
             return null;
