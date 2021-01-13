@@ -1,9 +1,7 @@
 package ru.bstu.iitus.vt41.kmi.person;
 
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Scanner;
 
 @ToString

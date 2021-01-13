@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.bstu.iitus.vt41.kmi.Exeptions.OnlyDigitException;
 import ru.bstu.iitus.vt41.kmi.service.InputPerson;
-
 import java.util.Scanner;
 
 @Getter
