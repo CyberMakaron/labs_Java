@@ -1,26 +1,28 @@
 package ru.bstu.iitus.vt41.kmi.person;
 
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Scanner;
 
 @ToString
 public abstract class Person {
     @ToString.Exclude
-    Calendar birthday;
+    LocalDate birthday;
     @ToString.Include(name = "Имя")
     String name;
     public abstract void init(Scanner scanner); // считывание параметров с консоли
     @ToString.Include(name = "Возраст")
     public int getAge(){ // возвращается возраст человека на текущий момент (полное количество лет)
-        Calendar currentDate = Calendar.getInstance();
-        int years = currentDate.get(Calendar.YEAR) - this.birthday.get(Calendar.YEAR);
-        int currentMonth = currentDate.get(Calendar.MONTH);
-        int birthMonth = this.birthday.get(Calendar.MONTH);
+        LocalDate currentDate = LocalDate.now();
+        int years = currentDate.getYear() - this.birthday.getYear();
+        int currentMonth = currentDate.getMonthValue();
+        int birthMonth = this.birthday.getMonthValue();
         if (currentMonth < birthMonth) {
             years --;
         } else if (currentMonth == birthMonth
-                && currentDate.get(Calendar.DAY_OF_MONTH) < this.birthday.get(Calendar.DAY_OF_MONTH)) {
+                && currentDate.getDayOfMonth() < this.birthday.getDayOfMonth()) {
             years --;
         }
         return years;
