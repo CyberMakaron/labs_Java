@@ -1,7 +1,6 @@
 package ru.bstu.iitus.vt41.kmi.service;
 
 import java.lang.String;
-
 import lombok.Getter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
