@@ -3,6 +3,7 @@ package ru.bstu.iitus.vt41.kmi.person;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.json.simple.JSONObject;
 import ru.bstu.iitus.vt41.kmi.Exeptions.OnlyDigitException;
 import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 import java.util.Scanner;
@@ -33,5 +34,18 @@ public class Student extends Person {
                 msg = "Номер зачётки должен содержать только цифры!\n" + msg;
             }
         super.birthday = InputPerson.inputDate(scanner, "Дата рождения:");
+    }
+    public void initFromJSON(JSONObject jsonObject){
+        super.name = (String) jsonObject.get("Имя");
+        this.group = (String) jsonObject.get("Группа");
+        this.institute = (String) jsonObject.get("Институт");
+        this.creditCardNum = (String) jsonObject.get("Номер зачётки");
+        try {
+            if (this.creditCardNum != null) InputPerson.checkDigitString(creditCardNum);
+        } catch(OnlyDigitException ex){
+            this.creditCardNum = null;
+        }
+        String stringBirthday = (String)jsonObject.get("Дата рождения");
+        super.birthday =  InputPerson.getLocalDate(stringBirthday);
     }
 }

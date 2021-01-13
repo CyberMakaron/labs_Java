@@ -1,5 +1,6 @@
 package ru.bstu.iitus.vt41.kmi.enums;
 
+import java.lang.String;
 import lombok.Getter;
 import ru.bstu.iitus.vt41.kmi.person.*;
 
@@ -18,12 +19,20 @@ public enum PersonType {
         this.personClass = aClass;
         this.label = label;
     }
-    public static PersonType valueOfID(int id) {
+    public static PersonType valueOfID(int id) throws IllegalArgumentException{
         for (PersonType personType : values()) {
             if (personType.getId() == id) {
                 return personType;
             }
         }
-        throw new IllegalArgumentException("Введено не корректное значение");
+        throw new IllegalArgumentException("Передано несуществующее значение");
+    }
+    public static PersonType valueOfLabel(String label) throws IllegalArgumentException{
+        for (PersonType personType : values()) {
+            if (personType.getLabel().equals(label)) {
+                return personType;
+            }
+        }
+        throw new IllegalArgumentException("Передано несуществующее значение");
     }
 }

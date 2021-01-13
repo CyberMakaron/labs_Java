@@ -1,16 +1,29 @@
 package ru.bstu.iitus.vt41.kmi.service;
 
+import java.lang.String;
+
+import lombok.Getter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import ru.bstu.iitus.vt41.kmi.enums.PersonType;
 import ru.bstu.iitus.vt41.kmi.person.Person;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class WorkWthPersons {
+    @Getter
+    final static String pathInput = "./src/inputPersons.json";
+    @Getter
+    final static String pathOutput = "./src/outputPersons.txt";
     public WorkWthPersons() { }
     public ArrayList<Person> inputPersons(Scanner scanner){
         System.out.print("Введите количество человек: ");
         int count = scanner.nextInt();
-        ArrayList<Person> list = new ArrayList<Person>();
+        ArrayList<Person> list = new ArrayList<>();
         for (int i = 0; i < count; i++){
             list.add(inputPerson(scanner));
         }
@@ -18,7 +31,6 @@ public class WorkWthPersons {
     }
     public Person inputPerson(Scanner scanner){
         Person person;
-
         String label = getLabelPersonTypeInformation();
         int mode = InputPerson.inputInteger(scanner, label);
         boolean flag;
@@ -29,7 +41,13 @@ public class WorkWthPersons {
         return person;
     }
     private Person makePersonByIndex(Scanner scanner, int mode) {
-        PersonType personType = PersonType.valueOfID(mode);
+        PersonType personType;
+        try {
+            personType = PersonType.valueOfID(mode);
+        } catch (IllegalArgumentException e){
+            System.out.println("Введён неверный номер! Повторите ввод");
+            return null;
+        }
         System.out.println("Введите персону с типом '" + personType.getLabel() + "'");
         try {
             Person currentPerson = personType.getPersonClass().newInstance();
@@ -41,13 +59,13 @@ public class WorkWthPersons {
         }
     }
     private String getLabelPersonTypeInformation() {
-        String label = "Укажите тип вводимой записи:";
+        StringBuilder label = new StringBuilder("Укажите тип вводимой записи:");
         for (PersonType type : PersonType.values()) {
-            label = label + "\n" + type.getId() + ". " + type.getLabel();
+            label.append("\n").append(type.getId()).append(". ").append(type.getLabel());
         }
-        return label;
+        return label.toString();
     }
-    public static Person getJunior(ArrayList<Person> persons){
+    public Person getJunior(ArrayList<Person> persons){
         int maxAge = Integer.MAX_VALUE;
         Person juniorPerson = null;
         for (Person p : persons){
@@ -58,5 +76,42 @@ public class WorkWthPersons {
             }
         }
         return juniorPerson;
+    }
+
+    public ArrayList<Person> loadPersonsFromFile() throws InstantiationException, IllegalAccessException {
+        FileReader reader;
+        try {
+            reader = new FileReader(this.pathInput);
+        } catch(IOException e){
+            System.out.println("Load from file failed: " + e);
+            return null;
+        }
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject;
+        try {
+            jsonObject = (JSONObject) jsonParser.parse(reader);
+        } catch (ParseException | IOException ex){
+            System.out.println("Error during parsing: " + ex);
+            return null;
+        }
+        JSONArray jsonPersons = (JSONArray) jsonObject.get("Persons");
+        ArrayList<Person> persons = new ArrayList<>();
+        for (Object jsonPerson : jsonPersons) {
+            Person p = makePersonFromJSON((JSONObject) jsonPerson);
+            if (p != null)
+                persons.add(p);
+        }
+        return persons;
+    }
+    private Person makePersonFromJSON(JSONObject jsonPerson) throws IllegalAccessException, InstantiationException {
+        String label = (String) jsonPerson.get("label");
+        Person person;
+        try {
+            person = PersonType.valueOfLabel(label).getPersonClass().newInstance();
+        } catch(IllegalArgumentException ex){
+            return null;
+        }
+        person.initFromJSON(jsonPerson);
+        return person;
     }
 }

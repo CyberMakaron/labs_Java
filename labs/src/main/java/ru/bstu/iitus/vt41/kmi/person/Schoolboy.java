@@ -3,6 +3,7 @@ package ru.bstu.iitus.vt41.kmi.person;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.json.simple.JSONObject;
 import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 import java.util.Scanner;
 
@@ -22,4 +23,12 @@ public class Schoolboy extends Person {
         this.school = InputPerson.inputString(scanner, "Школа:");
         super.birthday = InputPerson.inputDate(scanner, "Дата рождения:");
     }
+    public void initFromJSON(JSONObject jsonObject){
+        super.name = (String)jsonObject.get("Имя");
+        this._class = (String)jsonObject.get("Класс");
+        this.school = (String)jsonObject.get("Школа");
+        String stringBirthday = (String)jsonObject.get("Дата рождения");
+        super.birthday =  InputPerson.getLocalDate(stringBirthday);
+    }
+
 }

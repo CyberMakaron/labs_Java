@@ -35,36 +35,36 @@ public class InputPerson {
         String str;
         System.out.println(msg);
         str = scanner.nextLine();
+        checkDigitString(str);
+        return str;
+    }
+    public static void checkDigitString(String str) throws OnlyDigitException {
+        if (str == null)
+            throw new OnlyDigitException("Строка не инициализирована!", "");
         if (!str.matches("\\d+"))
             throw new OnlyDigitException("Строка содержит нечисловые значения", str);
-        return str;
     }
     public static LocalDate inputDate(Scanner scanner, String msg){
         System.out.println(msg);
         String stringDate = inputString(scanner, "Введите дату в формфте ДД.ММ.ГГГГ");
-        String[] splitedDate = null;
-        boolean dateFormatIsValid = false;
-        if (stringDate.matches("(\\d{2}\\.){2}\\d{4}")) {
-            splitedDate = stringDate.split("\\.");
-            dateFormatIsValid = true;
-            System.out.println(splitedDate.length);
-        }
-        while (!dateFormatIsValid || !dateIsValid(Integer.parseInt(splitedDate[2]), Integer.parseInt(splitedDate[1]), Integer.parseInt(splitedDate[0]))){
+        LocalDate date = getLocalDate(stringDate);
+        while (date == null){
             stringDate = inputString(scanner, "Дата введена неверно! Повторите ввод.");
-            if (stringDate.matches("(\\d{2}\\.){2}\\d{4}")) {
-                splitedDate = stringDate.split("\\.");
-                dateFormatIsValid = true;
-            }
+            date = getLocalDate(stringDate);
         }
-        LocalDate date = LocalDate.of(Integer.parseInt(splitedDate[2]), Integer.parseInt(splitedDate[1]), Integer.parseInt(splitedDate[0]));
         return date;
     }
-    private static boolean dateIsValid(int y, int m, int d){
+    public static LocalDate getLocalDate(String date){
+        String[] splitedDate;
+        if (date.matches("(\\d{2}\\.){2}\\d{4}")) {
+            splitedDate = date.split("\\.");
+        } else {
+            return null;
+        }
         try {
-            LocalDate ld = LocalDate.of(y, m, d);
-            return Boolean.TRUE ;
+            return LocalDate.of(Integer.parseInt(splitedDate[2]), Integer.parseInt(splitedDate[1]), Integer.parseInt(splitedDate[0]));
         } catch (DateTimeException ex) {
-            return Boolean.FALSE ;
+            return null;
         }
     }
 }

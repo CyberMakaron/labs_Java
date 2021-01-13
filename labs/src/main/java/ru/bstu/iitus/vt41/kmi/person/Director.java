@@ -3,6 +3,7 @@ package ru.bstu.iitus.vt41.kmi.person;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.json.simple.JSONObject;
 import ru.bstu.iitus.vt41.kmi.service.InputPerson;
 import java.util.Scanner;
 
@@ -16,5 +17,10 @@ public class Director extends Worker {
     public void init(Scanner scanner){
         super.init(scanner);
         this.post = InputPerson.inputString(scanner, "Директор какой масти:");
+    }
+    public void initFromJSON(JSONObject jsonObject){
+        super.initFromJSON(jsonObject);
+        this.post = (String) jsonObject.get("Должность");
+
     }
 }
